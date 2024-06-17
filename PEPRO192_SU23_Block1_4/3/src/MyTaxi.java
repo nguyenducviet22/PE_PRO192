@@ -1,5 +1,4 @@
 
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
@@ -10,66 +9,70 @@ import java.util.List;
  */
 /**
  *
- * @author admin
+ * @author NGUYEN DUC VIET
  */
 public class MyTaxi implements ITaxi {
-    
-    public static boolean checkStringPalindrome(String s) {
-        StringBuilder sb = new StringBuilder(s);
-        return s.equals(sb.reverse().toString());
-    }
-    
-    public static boolean checkLength(String s) {
-        return s.length() >= 2;
-    }
-    
-    public static boolean checkTwoEvenDigitsInSalary(int salary) {
-        String salaryToString = salary + "";
-        int countNumberIsDigit = 0;
-        for (int i = 0; i < salaryToString.length(); i++) {
-            if (Integer.parseInt(salaryToString.charAt(i) + "") % 2 == 0) {
-                countNumberIsDigit++;
+
+    public boolean isPalindrome(String driver) {
+        char[] chars = driver.toCharArray();
+        for (int i = 0; i < chars.length; i++) {
+            if (chars[i] != chars[chars.length - 1 - i]) {
+                return false;
             }
         }
-        return countNumberIsDigit == 2;
+        return true;
     }
-    
+
     @Override
     public int f1(List<Taxi> t) {
-        int totalNumberOfSalary = 0;
-        for (Taxi taxi : t) {
-            if (!checkStringPalindrome(taxi.getDriver()) && checkLength(taxi.getDriver())) {
-                totalNumberOfSalary += taxi.getSalary();
+        int total = 0;
+        for (int i = 0; i < t.size(); i++) {
+            String driver = t.get(i).getDriver();
+            if (driver.length() >= 2
+                    && !isPalindrome(driver)) {
+                total += t.get(i).getSalary();
             }
         }
-        return totalNumberOfSalary;
+        return total;
     }
-    
+
+    public boolean isEvenDigit(int salary) {
+        int div = salary;
+        while (div != 0) {
+            int mod = div % 10;
+            div = div / 10; 
+            if (mod % 2 != 0) {
+                return false;
+            }
+        }
+        return true;
+    }
+
     @Override
     public void f2(List<Taxi> t) {
-        int indexRemoveElement = -1;
-        boolean checkIndexElementExits = false;
         for (int i = 0; i < t.size(); i++) {
-            if (checkTwoEvenDigitsInSalary(t.get(i).getSalary())) {
-                indexRemoveElement = i;
-                checkIndexElementExits = true;
+            int salary = t.get(i).getSalary();
+            if (salary >= 10 && salary <= 99 && isEvenDigit(salary)) {
+                t.remove(i);
                 break;
             }
         }
-        if (checkIndexElementExits) {
-            t.remove(indexRemoveElement);
-        }
     }
-    
+
     @Override
     public void f3(List<Taxi> t) {
-        Collections.sort(t, (Taxi o1, Taxi o2) -> {
-            if (o1.getSalary() != o2.getSalary()) {
-                return -Integer.compare(o1.getSalary(), o2.getSalary());
-            } else {
-                return o1.getDriver().compareTo(o2.getDriver());
+        t.sort(new Comparator<Taxi>() {
+            @Override
+            public int compare(Taxi o1, Taxi o2) {
+                if (o1.getSalary() < o2.getSalary()) {
+                    return 1;
+                } else if (o1.getSalary() > o2.getSalary()) {
+                    return -1;
+                } else {
+                    return o1.getDriver().compareToIgnoreCase(o2.getDriver());
+                }
             }
         });
     }
-    
+
 }

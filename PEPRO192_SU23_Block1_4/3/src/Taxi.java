@@ -6,7 +6,7 @@
 
 /**
  *
- * @author admin
+ * @author NGUYEN DUC VIET
  */
 public class Taxi {
     private String driver;
