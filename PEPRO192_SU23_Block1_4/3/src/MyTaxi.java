@@ -40,10 +40,10 @@ public class MyTaxi implements ITaxi {
         int div = salary;
         while (div != 0) {
             int mod = div % 10;
-            div = div / 10; 
             if (mod % 2 != 0) {
                 return false;
             }
+            div = div / 10; 
         }
         return true;
     }

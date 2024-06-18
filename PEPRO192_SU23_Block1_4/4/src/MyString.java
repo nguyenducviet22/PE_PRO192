@@ -6,48 +6,56 @@
 
 /**
  *
- * @author admin
+ * @author NGUYEN DUC VIET
  */
 public class MyString implements IString {
 
-    public static boolean checkStringPalindrome(String s) {
-        StringBuilder sb = new StringBuilder(s);
-        return s.equals(sb.reverse().toString());
+    public boolean isPalindrome(String word) {
+        char[] chars = word.toCharArray();
+        for (int i = 0; i < chars.length; i++) {
+            if (chars[i] != chars[chars.length - 1 - i]) {
+                return false;
+            }
+        }
+        return true;
     }
 
-    public static boolean checkLength(String s) {
-        return s.length() >= 2;
+    public boolean is2chars(String word) {
+        char[] chars = word.toCharArray();
+        int count = 0;
+        for (char c : chars) {
+            count++;
+        }
+        if (count < 2) {
+            return false;
+        }
+        return true;
     }
 
     @Override
-    public int f1(String str) {
-        String ArraySaveWords[] = str.split("\\s+");
-        int countPalindrome = 0;
-        for(String s : ArraySaveWords){
-            if(checkLength(s) && checkStringPalindrome(s)){
-                countPalindrome++;
+    public int f1(String str) { //a aa ab ac bb aba abc
+        int count = 0;
+        String[] words = str.split(" ");
+        for (String word : words) {
+            if (is2chars(word) && isPalindrome(word)) {
+                count++;
             }
         }
-        return countPalindrome;
+        return count;
     }
 
     @Override
-    public String f2(String str) {
-        int lengthOfStringMax = 0;
-        String ArraySaveWords[] = str.split("\\s+");
-        for(String x : ArraySaveWords){
-            if(x.length() > lengthOfStringMax){
-                lengthOfStringMax = x.length();
+    public String f2(String str) { //a aa bb cc d e
+        String[] words = str.split(" ");
+        for (int i = 0; i < words.length - 1; i++) {
+            for (int j = 1; j < words.length; j++) {
+                if (words[i].length() < words[j].length()) {
+                    String tem = words[i];
+                    words[i] = words[j];
+                    words[j] = tem;
+                }
             }
         }
-        String firstWordHaveLogestLength = "";
-        for(String string : ArraySaveWords){
-            if(string.length() == lengthOfStringMax){
-                firstWordHaveLogestLength = string;
-                break;
-            }
-        }
-        return firstWordHaveLogestLength;
+        return words[0];
     }
-
 }
